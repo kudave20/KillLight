@@ -4,8 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "EnhancedInput/Public/InputActionValue.h"
+#include "InputActionValue.h"
 #include "MainCharacter.generated.h"
+
+#define ARM_LENGTH 150.f
 
 UCLASS()
 class KILLLIGHT_API AMainCharacter : public ACharacter
@@ -20,20 +22,32 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	UPROPERTY(EditAnywhere, Category = Input)
+	class UInputMappingContext* MainContext;
+
+	UPROPERTY(EditAnywhere, Category = Input)
+	class UInputAction* MovementAction;
+
+	UPROPERTY(EditAnywhere, Category = Input)
+	class UInputAction* LookAction;
+
+	UPROPERTY(EditAnywhere, Category = Input)
+	class UInputAction* JumpAction;
+
+	UPROPERTY(EditAnywhere, Category = Input)
+	class UInputAction* InteractAction;
+
+	void Move(const FInputActionValue& Value);
+	void Look(const FInputActionValue& Value);
+	void InteractLockedDoor();
+
 private:
-	void MoveForward(const FInputActionValue& Value);
-	void MoveRight(const FInputActionValue& Value);
-	void Turn(const FInputActionValue& Value);
-	void LookUp(const FInputActionValue& Value);
-
-	UPROPERTY(EditDefaultsOnly, Category = "Enhanced Input")
-	class UInputMappingContext* InputMapping;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Enhanced Input")
-	class UInputConfigData* InputActions;
-
-public:	
 	UPROPERTY(VisibleAnywhere, Category = Camera)
 	class UCameraComponent* Camera;
+
+	class ALockedDoor* OverlappingLockedDoor;
+
+public:
+	FORCEINLINE void SetOverlappingLockedDoor(ALockedDoor* LockedDoor) { OverlappingLockedDoor = LockedDoor; }
 
 };

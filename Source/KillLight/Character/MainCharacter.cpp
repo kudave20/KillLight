@@ -3,10 +3,11 @@
 
 #include "MainCharacter.h"
 #include "Camera/CameraComponent.h"
-#include "EnhancedInput/Public/InputMappingContext.h"
-#include "EnhancedInput/Public/EnhancedInputSubsystems.h"
-#include "EnhancedInput/Public/EnhancedInputComponent.h"
-#include "KillLight/Input/InputConfigData.h"
+#include "Kismet/GameplayStatics.h"
+#include "KillLight/Props/LockedDoor.h"
+#include "Components/InputComponent.h"
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
 
 AMainCharacter::AMainCharacter()
 {
@@ -20,7 +21,14 @@ AMainCharacter::AMainCharacter()
 void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
+	{
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		{
+			Subsystem->AddMappingContext(MainContext, 0);
+		}
+	}
 }
 
 void AMainCharacter::Tick(float DeltaTime)
@@ -33,65 +41,72 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	APlayerController* PlayerController = Cast<APlayerController>(GetController());
-	if (PlayerController)
+	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
-		UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
-		if (Subsystem)
-		{
-			Subsystem->ClearAllMappings();
-			Subsystem->AddMappingContext(InputMapping, 0);
-
-			UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
-			if (EnhancedInputComponent)
-			{
-				EnhancedInputComponent->BindAction(InputActions->InputJump, ETriggerEvent::Triggered, this, &ACharacter::Jump);
-				EnhancedInputComponent->BindAction(InputActions->InputMoveForward, ETriggerEvent::Triggered, this, &AMainCharacter::MoveForward);
-				EnhancedInputComponent->BindAction(InputActions->InputMoveRight, ETriggerEvent::Triggered, this, &AMainCharacter::MoveRight);
-				EnhancedInputComponent->BindAction(InputActions->InputTurn, ETriggerEvent::Triggered, this, &AMainCharacter::Turn);
-				EnhancedInputComponent->BindAction(InputActions->InputLookUp, ETriggerEvent::Triggered, this, &AMainCharacter::LookUp);
-			}
-		}
+		EnhancedInputComponent->BindAction(MovementAction, ETriggerEvent::Triggered, this, &AMainCharacter::Move);
+		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMainCharacter::Look);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AMainCharacter::InteractLockedDoor);
 	}
 }
 
-void AMainCharacter::MoveForward(const FInputActionValue& Value)
+void AMainCharacter::Move(const FInputActionValue& Value)
 {
-	if (Controller != nullptr)
-	{
-		const float MoveValue = Value.Get<float>();
+	const FVector2D MovementVector = Value.Get<FVector2D>();
 
-		if (MoveValue != 0.f)
+	const FRotator Rotation = Controller->GetControlRotation();
+	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
+
+	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+	AddMovementInput(ForwardDirection, MovementVector.Y);
+	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+	AddMovementInput(RightDirection, MovementVector.X);
+}
+
+void AMainCharacter::Look(const FInputActionValue& Value)
+{
+	const FVector2D LookAxisVector = Value.Get<FVector2D>();
+
+	AddControllerPitchInput(LookAxisVector.Y);
+	AddControllerYawInput(LookAxisVector.X);
+}
+
+void AMainCharacter::InteractLockedDoor()
+{
+	if (OverlappingLockedDoor == nullptr) return;
+
+	FVector2D ViewportSize;
+	if (GEngine && GEngine->GameViewport)
+	{
+		GEngine->GameViewport->GetViewportSize(ViewportSize);
+	}
+
+	FVector2D CrosshairLocation(ViewportSize.X / 2.f, ViewportSize.Y / 2.f);
+	FVector CrosshairWorldPosition;
+	FVector CrosshairWorldDirection;
+	bool bScreenToWorld = UGameplayStatics::DeprojectScreenToWorld(
+		UGameplayStatics::GetPlayerController(this, 0),
+		CrosshairLocation,
+		CrosshairWorldPosition,
+		CrosshairWorldDirection
+	);
+
+	if (bScreenToWorld)
+	{
+		FHitResult HitResult;
+		FVector Start = CrosshairWorldPosition;
+		FVector End = Start + CrosshairWorldDirection * ARM_LENGTH;
+
+		bool bReachedDoor = GetWorld()->LineTraceSingleByChannel(
+			HitResult,
+			Start,
+			End,
+			ECollisionChannel::ECC_Visibility
+		) && Cast<ALockedDoor>(HitResult.GetActor());
+
+		if (bReachedDoor)
 		{
-			const FRotator YawRotation(0.f, Controller->GetControlRotation().Yaw, 0.f);
-			const FVector Direction(FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X));
-			AddMovementInput(Direction, MoveValue);
+			OverlappingLockedDoor->Interact();
 		}
 	}
 }
-
-void AMainCharacter::MoveRight(const FInputActionValue& Value)
-{
-	if (Controller != nullptr)
-	{
-		const float MoveValue = Value.Get<float>();
-
-		if (MoveValue != 0.f)
-		{
-			const FRotator YawRotation(0.f, Controller->GetControlRotation().Yaw, 0.f);
-			const FVector Direction(FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y));
-			AddMovementInput(Direction, MoveValue);
-		}
-	}
-}
-
-void AMainCharacter::Turn(const FInputActionValue& Value)
-{
-	AddControllerYawInput(Value.Get<float>());
-}
-
-void AMainCharacter::LookUp(const FInputActionValue& Value)
-{
-	AddControllerPitchInput(Value.Get<float>());
-}
-
