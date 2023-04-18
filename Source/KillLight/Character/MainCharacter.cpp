@@ -4,7 +4,7 @@
 #include "MainCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "KillLight/Props/Door.h"
+#include "KillLight/Interface/InteractInterface.h"
 #include "Components/InputComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
@@ -46,7 +46,7 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		EnhancedInputComponent->BindAction(MovementAction, ETriggerEvent::Triggered, this, &AMainCharacter::Move);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMainCharacter::Look);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
-		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AMainCharacter::InteractLockedDoor);
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AMainCharacter::Interact);
 	}
 }
 
@@ -71,7 +71,7 @@ void AMainCharacter::Look(const FInputActionValue& Value)
 	AddControllerYawInput(LookAxisVector.X);
 }
 
-void AMainCharacter::InteractLockedDoor()
+void AMainCharacter::Interact()
 {
 	FVector2D ViewportSize;
 	if (GEngine && GEngine->GameViewport)
@@ -95,17 +95,20 @@ void AMainCharacter::InteractLockedDoor()
 		FVector Start = CrosshairWorldPosition;
 		FVector End = Start + CrosshairWorldDirection * ARM_LENGTH;
 
-		GetWorld()->LineTraceSingleByChannel(
+		bool bTraceForward = GetWorld()->LineTraceSingleByChannel(
 			HitResult,
 			Start,
 			End,
 			ECollisionChannel::ECC_Visibility
 		);
 
-		ADoor* LockedDoor = Cast<ADoor>(HitResult.GetActor());
-		if (LockedDoor)
+		if (bTraceForward)
 		{
-			LockedDoor->Interact();
+			AActor* Interactable = HitResult.GetActor();
+			if (Interactable->Implements<UInteractInterface>())
+			{
+				IInteractInterface::Execute_OnInteract(Interactable, this);
+			}
 		}
 	}
 }

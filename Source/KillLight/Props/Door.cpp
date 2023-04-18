@@ -29,7 +29,7 @@ void ADoor::Tick(float DeltaTime)
 
 }
 
-void ADoor::Interact()
+void ADoor::OnInteract_Implementation(AActor* InteractableActor)
 {
 	UGameplayStatics::PlaySoundAtLocation(this, DoorSound, GetActorLocation());
 }

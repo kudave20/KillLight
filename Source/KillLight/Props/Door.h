@@ -4,20 +4,21 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "KillLight/Interface/InteractInterface.h"
 #include "Door.generated.h"
 
 UCLASS()
-class KILLLIGHT_API ADoor : public AActor
+class KILLLIGHT_API ADoor : public AActor, public IInteractInterface
 {
 	GENERATED_BODY()
 
 public:
 	ADoor();
 	virtual void Tick(float DeltaTime) override;
-	virtual void Interact();
 
 protected:
 	virtual void BeginPlay() override;
+	virtual void OnInteract_Implementation(AActor* InteractableActor) override;
 
 private:
 	UPROPERTY(EditAnywhere)

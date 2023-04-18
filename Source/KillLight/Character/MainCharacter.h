@@ -39,7 +39,7 @@ protected:
 
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
-	void InteractLockedDoor();
+	void Interact();
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = Camera)
