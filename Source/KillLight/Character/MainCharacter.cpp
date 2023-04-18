@@ -4,7 +4,7 @@
 #include "MainCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "KillLight/Props/LockedDoor.h"
+#include "KillLight/Props/Door.h"
 #include "Components/InputComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
@@ -73,8 +73,6 @@ void AMainCharacter::Look(const FInputActionValue& Value)
 
 void AMainCharacter::InteractLockedDoor()
 {
-	if (OverlappingLockedDoor == nullptr) return;
-
 	FVector2D ViewportSize;
 	if (GEngine && GEngine->GameViewport)
 	{
@@ -97,16 +95,17 @@ void AMainCharacter::InteractLockedDoor()
 		FVector Start = CrosshairWorldPosition;
 		FVector End = Start + CrosshairWorldDirection * ARM_LENGTH;
 
-		bool bReachedDoor = GetWorld()->LineTraceSingleByChannel(
+		GetWorld()->LineTraceSingleByChannel(
 			HitResult,
 			Start,
 			End,
 			ECollisionChannel::ECC_Visibility
-		) && Cast<ALockedDoor>(HitResult.GetActor());
+		);
 
-		if (bReachedDoor)
+		ADoor* LockedDoor = Cast<ADoor>(HitResult.GetActor());
+		if (LockedDoor)
 		{
-			OverlappingLockedDoor->Interact();
+			LockedDoor->Interact();
 		}
 	}
 }

@@ -7,7 +7,7 @@
 #include "InputActionValue.h"
 #include "MainCharacter.generated.h"
 
-#define ARM_LENGTH 150.f
+#define ARM_LENGTH 200.f
 
 UCLASS()
 class KILLLIGHT_API AMainCharacter : public ACharacter
@@ -45,9 +45,6 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = Camera)
 	class UCameraComponent* Camera;
 
-	class ALockedDoor* OverlappingLockedDoor;
-
 public:
-	FORCEINLINE void SetOverlappingLockedDoor(ALockedDoor* LockedDoor) { OverlappingLockedDoor = LockedDoor; }
 
 };
