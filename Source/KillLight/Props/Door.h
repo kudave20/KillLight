@@ -18,13 +18,13 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-	virtual void OnInteract_Implementation(AActor* InteractableActor) override;
+	virtual void OnInteract_Implementation() override;
 
 private:
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* DoorFrame;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* Door;
 
 	UPROPERTY(EditAnywhere)

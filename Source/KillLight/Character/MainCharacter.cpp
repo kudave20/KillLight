@@ -105,9 +105,9 @@ void AMainCharacter::Interact()
 		if (bTraceForward)
 		{
 			AActor* Interactable = HitResult.GetActor();
-			if (Interactable->Implements<UInteractInterface>())
+			if (Interactable && Interactable->Implements<UInteractInterface>())
 			{
-				IInteractInterface::Execute_OnInteract(Interactable, this);
+				IInteractInterface::Execute_OnInteract(Interactable);
 			}
 		}
 	}
