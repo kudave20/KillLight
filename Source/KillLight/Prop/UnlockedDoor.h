@@ -13,5 +13,5 @@ UCLASS()
 class KILLLIGHT_API AUnlockedDoor : public ADoor
 {
 	GENERATED_BODY()
-
+	
 };

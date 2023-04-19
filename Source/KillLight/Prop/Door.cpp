@@ -2,10 +2,8 @@
 
 
 #include "Door.h"
-#include "Components/BoxComponent.h"
-#include "Kismet/GameplayStatics.h"
-#include "Sound/SoundCue.h"
 
+// Sets default values
 ADoor::ADoor()
 {
 	PrimaryActorTick.bCanEverTick = false;
@@ -20,9 +18,8 @@ ADoor::ADoor()
 void ADoor::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 }
-
 void ADoor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -32,6 +29,4 @@ void ADoor::Tick(float DeltaTime)
 void ADoor::OnInteract_Implementation()
 {
 	IInteractInterface::OnInteract_Implementation();
-
-	UGameplayStatics::PlaySoundAtLocation(this, DoorSound, GetActorLocation());
 }

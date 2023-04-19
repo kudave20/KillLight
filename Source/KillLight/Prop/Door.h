@@ -11,7 +11,7 @@ UCLASS()
 class KILLLIGHT_API ADoor : public AActor, public IInteractInterface
 {
 	GENERATED_BODY()
-
+	
 public:
 	ADoor();
 	virtual void Tick(float DeltaTime) override;
@@ -21,14 +21,11 @@ protected:
 	virtual void OnInteract_Implementation() override;
 
 private:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Door")
 	UStaticMeshComponent* DoorFrame;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Door", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* Door;
-
-	UPROPERTY(EditAnywhere)
-	class USoundCue* DoorSound;
 
 public:
 
