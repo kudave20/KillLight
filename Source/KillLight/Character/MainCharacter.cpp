@@ -95,20 +95,17 @@ void AMainCharacter::Interact()
 		FVector Start = CrosshairWorldPosition;
 		FVector End = Start + CrosshairWorldDirection * ARM_LENGTH;
 
-		bool bTraceForward = GetWorld()->LineTraceSingleByChannel(
+		GetWorld()->LineTraceSingleByChannel(
 			HitResult,
 			Start,
 			End,
 			ECollisionChannel::ECC_Visibility
 		);
 
-		if (bTraceForward)
+		AActor* Interactable = HitResult.GetActor();
+		if (Interactable && Interactable->Implements<UInteractInterface>())
 		{
-			AActor* Interactable = HitResult.GetActor();
-			if (Interactable && Interactable->Implements<UInteractInterface>())
-			{
-				IInteractInterface::Execute_OnInteract(Interactable);
-			}
+			IInteractInterface::Execute_OnInteract(Interactable);
 		}
 	}
 }
