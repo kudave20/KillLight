@@ -73,39 +73,19 @@ void AMainCharacter::Look(const FInputActionValue& Value)
 
 void AMainCharacter::Interact()
 {
-	FVector2D ViewportSize;
-	if (GEngine && GEngine->GameViewport)
-	{
-		GEngine->GameViewport->GetViewportSize(ViewportSize);
-	}
-
-	FVector2D CrosshairLocation(ViewportSize.X / 2.f, ViewportSize.Y / 2.f);
-	FVector CrosshairWorldPosition;
-	FVector CrosshairWorldDirection;
-	bool bScreenToWorld = UGameplayStatics::DeprojectScreenToWorld(
-		UGameplayStatics::GetPlayerController(this, 0),
-		CrosshairLocation,
-		CrosshairWorldPosition,
-		CrosshairWorldDirection
+	FHitResult HitResult;
+	FVector Start = Camera->GetComponentLocation();
+	FVector End = Start + Camera->GetComponentRotation().Vector() * ArmLength;
+	GetWorld()->LineTraceSingleByChannel(
+		HitResult,
+		Start,
+		End,
+		ECollisionChannel::ECC_Visibility
 	);
 
-	if (bScreenToWorld)
+	AActor* Interactable = HitResult.GetActor();
+	if (Interactable && Interactable->Implements<UInteractInterface>())
 	{
-		FHitResult HitResult;
-		FVector Start = CrosshairWorldPosition;
-		FVector End = Start + CrosshairWorldDirection * ARM_LENGTH;
-
-		GetWorld()->LineTraceSingleByChannel(
-			HitResult,
-			Start,
-			End,
-			ECollisionChannel::ECC_Visibility
-		);
-
-		AActor* Interactable = HitResult.GetActor();
-		if (Interactable && Interactable->Implements<UInteractInterface>())
-		{
-			IInteractInterface::Execute_OnInteract(Interactable);
-		}
+		IInteractInterface::Execute_OnInteract(Interactable);
 	}
 }

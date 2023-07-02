@@ -29,13 +29,13 @@ protected:
 	class UInputAction* MovementAction;
 
 	UPROPERTY(EditAnywhere, Category = Input)
-	class UInputAction* LookAction;
+	UInputAction* LookAction;
 
 	UPROPERTY(EditAnywhere, Category = Input)
-	class UInputAction* JumpAction;
+	UInputAction* JumpAction;
 
 	UPROPERTY(EditAnywhere, Category = Input)
-	class UInputAction* InteractAction;
+	UInputAction* InteractAction;
 
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
@@ -44,6 +44,9 @@ protected:
 private:
 	UPROPERTY(VisibleAnywhere, Category = Camera)
 	class UCameraComponent* Camera;
+
+	UPROPERTY(EditAnywhere, Category = "Length")
+	float ArmLength = 200.0f;
 
 public:
 
