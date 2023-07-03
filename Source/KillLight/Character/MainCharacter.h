@@ -42,7 +42,7 @@ protected:
 	void Interact();
 
 private:
-	UPROPERTY(VisibleAnywhere, Category = Camera)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* Camera;
 
 	UPROPERTY(EditAnywhere, Category = "Length")
