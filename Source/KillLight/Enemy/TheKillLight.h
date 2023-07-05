@@ -23,8 +23,29 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class USphereComponent* OverlapSphere;
 
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	class UBoxComponent* CautionBox;
+
 	UFUNCTION()
-	virtual void OnOverlapBegin(
+	virtual void OnSphereBeginOverlap(
+		UPrimitiveComponent* OverlappedComponent,
+		AActor* OtherActor,
+		UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex,
+		bool bFromSweep,
+		const FHitResult& SweepResult
+	);
+
+	/*UFUNCTION()
+	void OnSphereEndOverlap(
+		UPrimitiveComponent* OverlappedComponent,
+		AActor* OtherActor,
+		UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex
+	);*/
+
+	UFUNCTION()
+	virtual void OnCautionBoxBeginOverlap(
 		UPrimitiveComponent* OverlappedComponent,
 		AActor* OtherActor,
 		UPrimitiveComponent* OtherComp,
@@ -34,7 +55,7 @@ private:
 	);
 
 	UFUNCTION()
-	void OnOverlapEnd(
+	void OnCautionBoxEndOverlap(
 		UPrimitiveComponent* OverlappedComponent,
 		AActor* OtherActor,
 		UPrimitiveComponent* OtherComp,

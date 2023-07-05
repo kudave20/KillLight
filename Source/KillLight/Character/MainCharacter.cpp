@@ -8,6 +8,7 @@
 #include "Components/InputComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Components/PostProcessComponent.h"
 
 AMainCharacter::AMainCharacter()
 {
@@ -16,6 +17,12 @@ AMainCharacter::AMainCharacter()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(GetMesh());
 	Camera->bUsePawnControlRotation = true;
+
+	PostProcess = CreateDefaultSubobject<UPostProcessComponent>(TEXT("PostProcess"));
+	PostProcess->SetupAttachment(Camera);
+	PostProcess->bEnabled = false;
+	PostProcess->Settings.VignetteIntensity = 0.8f;
+	PostProcess->Settings.bOverride_VignetteIntensity = true;
 }
 
 void AMainCharacter::BeginPlay()
@@ -87,5 +94,21 @@ void AMainCharacter::Interact()
 	if (Interactable && Interactable->Implements<UInteractInterface>())
 	{
 		IInteractInterface::Execute_OnInteract(Interactable);
+	}
+}
+
+void AMainCharacter::GetCautious()
+{
+	if (PostProcess)
+	{
+		PostProcess->bEnabled = true;
+	}
+}
+
+void AMainCharacter::GetRelieved()
+{
+	if (PostProcess)
+	{
+		PostProcess->bEnabled = false;
 	}
 }

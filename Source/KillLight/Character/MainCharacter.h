@@ -19,6 +19,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	void GetCautious();
+	void GetRelieved();
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -44,6 +47,9 @@ protected:
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* Camera;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	class UPostProcessComponent* PostProcess;
 
 	UPROPERTY(EditAnywhere, Category = "Length")
 	float ArmLength = 200.0f;
