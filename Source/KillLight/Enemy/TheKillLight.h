@@ -16,6 +16,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UFUNCTION(BlueprintCallable)
+	void StartChase();
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -25,6 +28,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class UBoxComponent* CautionBox;
+
+	UPROPERTY()
+	class AAIController* EnemyController;
 
 	UFUNCTION()
 	virtual void OnSphereBeginOverlap(

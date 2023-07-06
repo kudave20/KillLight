@@ -6,6 +6,8 @@
 #include "Components/SphereComponent.h"
 #include "Components/BoxComponent.h"
 #include "KillLight/Character/MainCharacter.h"
+#include "AIController.h"
+#include "Kismet/GameplayStatics.h"
 
 ATheKillLight::ATheKillLight()
 {
@@ -78,5 +80,15 @@ void ATheKillLight::OnCautionBoxEndOverlap(UPrimitiveComponent* OverlappedCompon
 	if (MainCharacter)
 	{
 		MainCharacter->GetRelieved();
+	}
+}
+
+void ATheKillLight::StartChase()
+{
+	EnemyController = Cast<AAIController>(GetController());
+	AActor* Target = UGameplayStatics::GetActorOfClass(this, AMainCharacter::StaticClass());
+	if (EnemyController && Target)
+	{
+		EnemyController->MoveToActor(Target);
 	}
 }
