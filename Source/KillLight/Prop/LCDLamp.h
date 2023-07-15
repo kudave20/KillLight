@@ -14,4 +14,10 @@ class KILLLIGHT_API ALCDLamp : public ALamp
 {
 	GENERATED_BODY()
 
+public:
+	ALCDLamp();
+
+private:
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	class UPointLightComponent* PointLight;
 };

@@ -2,3 +2,11 @@
 
 
 #include "LCDLamp.h"
+#include "Components/PointLightComponent.h"
+
+ALCDLamp::ALCDLamp() : Super()
+{
+	PointLight = CreateDefaultSubobject<UPointLightComponent>(TEXT("PointLight"));
+	PointLight->SetupAttachment(RootComponent);
+	PointLight->SetMobility(EComponentMobility::Stationary);
+}
