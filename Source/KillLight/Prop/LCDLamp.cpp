@@ -10,3 +10,13 @@ ALCDLamp::ALCDLamp() : Super()
 	PointLight->SetupAttachment(RootComponent);
 	PointLight->SetMobility(EComponentMobility::Stationary);
 }
+
+void ALCDLamp::TurnOff()
+{
+	Super::TurnOff();
+
+	if (PointLight)
+	{
+		PointLight->SetVisibility(false);
+	}
+}

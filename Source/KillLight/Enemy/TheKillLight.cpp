@@ -8,19 +8,26 @@
 #include "KillLight/Character/MainCharacter.h"
 #include "AIController.h"
 #include "Kismet/GameplayStatics.h"
+#include "Components/CapsuleComponent.h"
 
 ATheKillLight::ATheKillLight()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	GetCapsuleComponent()->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
+
 	OverlapSphere = CreateDefaultSubobject<USphereComponent>(TEXT("OverlapSphere"));
 	OverlapSphere->SetupAttachment(RootComponent);
 	OverlapSphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-	OverlapSphere->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
+	OverlapSphere->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	OverlapSphere->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldDynamic, ECollisionResponse::ECR_Overlap);
 
 	CautionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CautionBox"));
 	CautionBox->SetupAttachment(RootComponent);
 	CautionBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	CautionBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 	CautionBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 }
 

@@ -17,6 +17,8 @@ class KILLLIGHT_API ALCDLamp : public ALamp
 public:
 	ALCDLamp();
 
+	virtual void TurnOff() override;
+
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class UPointLightComponent* PointLight;

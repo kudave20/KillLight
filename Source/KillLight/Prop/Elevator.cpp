@@ -9,9 +9,11 @@ AElevator::AElevator()
 
 	Cage = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Cage"));
 	SetRootComponent(Cage);
+	Cage->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	Armature = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Armature"));
 	Armature->SetupAttachment(Cage);
+	Armature->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	LeftInteriorDoor = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LeftInteriorDoor"));
 	LeftInteriorDoor->SetupAttachment(Armature);
@@ -26,8 +28,6 @@ AElevator::AElevator()
 	RightOutsideDoor->SetupAttachment(Armature);
 
 	OpenTimeline = CreateDefaultSubobject<UTimelineComponent>(TEXT("OpenTimeline"));
-
-	SetActorEnableCollision(false);
 }
 
 void AElevator::BeginPlay()
