@@ -9,6 +9,9 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Components/PostProcessComponent.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Components/SpotLightComponent.h"
+#include "Sound/SoundCue.h"
 
 AMainCharacter::AMainCharacter()
 {
@@ -17,6 +20,20 @@ AMainCharacter::AMainCharacter()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(GetMesh());
 	Camera->bUsePawnControlRotation = true;
+
+	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
+	SpringArm->SetupAttachment(RootComponent);
+	SpringArm->TargetArmLength = 0.0f;
+	SpringArm->bUsePawnControlRotation = true;
+	SpringArm->bEnableCameraRotationLag = true;
+
+	FlashLight = CreateDefaultSubobject<USpotLightComponent>(TEXT("FlashLight"));
+	FlashLight->SetupAttachment(SpringArm);
+	FlashLight->LightColor = FColor(255, 251, 228);
+	FlashLight->AttenuationRadius = 1260.0f;
+	FlashLight->InnerConeAngle = 11.75f;
+	FlashLight->OuterConeAngle = 32.0f;
+	FlashLight->SetVisibility(false);
 
 	PostProcess = CreateDefaultSubobject<UPostProcessComponent>(TEXT("PostProcess"));
 	PostProcess->SetupAttachment(Camera);
@@ -55,6 +72,7 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMainCharacter::Look);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AMainCharacter::Interact);
+		EnhancedInputComponent->BindAction(ToggleFlashAction, ETriggerEvent::Triggered, this, &AMainCharacter::ToggleFlash);
 	}
 }
 
@@ -121,6 +139,22 @@ void AMainCharacter::Interact()
 	if (Interactable && Interactable->Implements<UInteractInterface>())
 	{
 		IInteractInterface::Execute_OnInteract(Interactable);
+	}
+}
+
+void AMainCharacter::ToggleFlash()
+{
+	if (FlashLight)
+	{
+		if (FlashLight->IsVisible())
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, FlashOffSound, FlashLight->GetComponentLocation());
+		}
+		else
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, FlashOnSound, FlashLight->GetComponentLocation());
+		}
+		FlashLight->ToggleVisibility();
 	}
 }
 

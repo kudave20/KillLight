@@ -7,8 +7,6 @@
 #include "InputActionValue.h"
 #include "MainCharacter.generated.h"
 
-#define ARM_LENGTH 200.f
-
 UCLASS()
 class KILLLIGHT_API AMainCharacter : public ACharacter
 {
@@ -40,13 +38,23 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* InteractAction;
 
+	UPROPERTY(EditAnywhere, Category = Input)
+	UInputAction* ToggleFlashAction;
+
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void Interact();
+	void ToggleFlash();
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* Camera;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	class USpringArmComponent* SpringArm;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	class USpotLightComponent* FlashLight;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class UPostProcessComponent* PostProcess;
@@ -67,6 +75,12 @@ private:
 
 	void StartHeadBob();
 	void StopHeadBob();
+
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	class USoundCue* FlashOnSound;
+
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	USoundCue* FlashOffSound;
 
 public:
 
