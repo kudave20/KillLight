@@ -51,6 +51,7 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		EnhancedInputComponent->BindAction(MovementAction, ETriggerEvent::Triggered, this, &AMainCharacter::Move);
+		EnhancedInputComponent->BindAction(MovementAction, ETriggerEvent::Completed, this, &AMainCharacter::StopHeadBob);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMainCharacter::Look);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AMainCharacter::Interact);
@@ -68,6 +69,32 @@ void AMainCharacter::Move(const FInputActionValue& Value)
 	AddMovementInput(ForwardDirection, MovementVector.Y);
 	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 	AddMovementInput(RightDirection, MovementVector.X);
+
+	StartHeadBob();
+}
+
+void AMainCharacter::StartHeadBob()
+{
+	PlayerCameraManager = PlayerCameraManager == nullptr ? UGameplayStatics::GetPlayerCameraManager(this, 0) : PlayerCameraManager;
+	if (PlayerCameraManager == nullptr) return;
+
+	if (!bShakeEnabled)
+	{
+		WalkCameraShake = PlayerCameraManager->StartCameraShake(WalkCameraShakeClass);
+		bShakeEnabled = true;
+	}
+}
+
+void AMainCharacter::StopHeadBob()
+{
+	PlayerCameraManager = PlayerCameraManager == nullptr ? UGameplayStatics::GetPlayerCameraManager(this, 0) : PlayerCameraManager;
+	if (PlayerCameraManager == nullptr) return;
+
+	if (bShakeEnabled && WalkCameraShake)
+	{
+		PlayerCameraManager->StopCameraShake(WalkCameraShake);
+		bShakeEnabled = false;
+	}
 }
 
 void AMainCharacter::Look(const FInputActionValue& Value)

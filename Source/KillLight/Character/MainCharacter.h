@@ -54,6 +54,20 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Length")
 	float ArmLength = 200.0f;
 
+	UPROPERTY()
+	APlayerCameraManager* PlayerCameraManager;
+
+	UPROPERTY(EditAnywhere, Category = "Camera Shake")
+	TSubclassOf<UCameraShakeBase> WalkCameraShakeClass;
+
+	UPROPERTY()
+	UCameraShakeBase* WalkCameraShake;
+
+	bool bShakeEnabled;
+
+	void StartHeadBob();
+	void StopHeadBob();
+
 public:
 
 };
