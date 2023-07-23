@@ -89,13 +89,3 @@ void ATheKillLight::OnCautionBoxEndOverlap(UPrimitiveComponent* OverlappedCompon
 		MainCharacter->GetRelieved();
 	}
 }
-
-void ATheKillLight::StartChase()
-{
-	EnemyController = Cast<AAIController>(GetController());
-	AActor* Target = UGameplayStatics::GetActorOfClass(this, AMainCharacter::StaticClass());
-	if (EnemyController && Target)
-	{
-		EnemyController->MoveToActor(Target);
-	}
-}

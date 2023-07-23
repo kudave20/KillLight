@@ -3,6 +3,8 @@
 
 #include "LCDLamp.h"
 #include "Components/PointLightComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
 
 ALCDLamp::ALCDLamp() : Super()
 {
@@ -21,5 +23,9 @@ void ALCDLamp::TurnOff()
 	if (PointLight)
 	{
 		PointLight->SetVisibility(false);
+	}
+	if (LightOutSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, LightOutSound, GetActorLocation());
 	}
 }

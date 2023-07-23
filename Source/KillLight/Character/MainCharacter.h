@@ -33,9 +33,6 @@ protected:
 	UInputAction* LookAction;
 
 	UPROPERTY(EditAnywhere, Category = Input)
-	UInputAction* JumpAction;
-
-	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* InteractAction;
 
 	UPROPERTY(EditAnywhere, Category = Input)
@@ -47,7 +44,7 @@ protected:
 	void ToggleFlash();
 
 private:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, Category = Camera)
 	class UCameraComponent* Camera;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")

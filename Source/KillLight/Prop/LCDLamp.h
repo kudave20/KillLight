@@ -22,4 +22,7 @@ public:
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class UPointLightComponent* PointLight;
+
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	class USoundCue* LightOutSound;
 };

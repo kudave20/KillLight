@@ -47,8 +47,8 @@ void AElevator::StartOpen()
 	OpenTrack.BindDynamic(this, &AElevator::Open);
 	if (OpenCurve && OpenTimeline)
 	{
-		LeftOpenStartY = LeftInteriorDoor->GetComponentLocation().Y;
-		RightOpenStartY = RightInteriorDoor->GetComponentLocation().Y;
+		LeftOpenStartY = LeftInteriorDoor->GetRelativeLocation().Y;
+		RightOpenStartY = RightInteriorDoor->GetRelativeLocation().Y;
 		OpenTimeline->AddInterpFloat(OpenCurve, OpenTrack);
 		OpenTimeline->Play();
 	}
@@ -61,21 +61,21 @@ void AElevator::Open(float OpenValue)
 	float LeftOpenCurrentY = FMath::Lerp(LeftOpenStartY, LeftOpenStartY - OpenDeltaY, OpenValue);
 	float RightOpenCurrentY = FMath::Lerp(RightOpenStartY, RightOpenStartY + OpenDeltaY, OpenValue);
 
-	FVector Location = LeftInteriorDoor->GetComponentLocation();
+	FVector Location = LeftInteriorDoor->GetRelativeLocation();
 	Location.Y = LeftOpenCurrentY;
-	LeftInteriorDoor->SetWorldLocation(Location);
+	LeftInteriorDoor->SetRelativeLocation(Location);
 
-	Location = LeftOutsideDoor->GetComponentLocation();
+	Location = LeftOutsideDoor->GetRelativeLocation();
 	Location.Y = LeftOpenCurrentY;
-	LeftOutsideDoor->SetWorldLocation(Location);
+	LeftOutsideDoor->SetRelativeLocation(Location);
 
-	Location = RightInteriorDoor->GetComponentLocation();
+	Location = RightInteriorDoor->GetRelativeLocation();
 	Location.Y = RightOpenCurrentY;
-	RightInteriorDoor->SetWorldLocation(Location);
+	RightInteriorDoor->SetRelativeLocation(Location);
 
-	Location = RightOutsideDoor->GetComponentLocation();
+	Location = RightOutsideDoor->GetRelativeLocation();
 	Location.Y = RightOpenCurrentY;
-	RightOutsideDoor->SetWorldLocation(Location);
+	RightOutsideDoor->SetRelativeLocation(Location);
 }
 
 void AElevator::StartClose()
