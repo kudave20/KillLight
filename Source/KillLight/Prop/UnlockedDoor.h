@@ -14,4 +14,7 @@ class KILLLIGHT_API AUnlockedDoor : public ADoor
 {
 	GENERATED_BODY()
 	
+private:
+	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool bIsOpen;
 };

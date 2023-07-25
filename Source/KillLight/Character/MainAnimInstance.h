@@ -28,4 +28,6 @@ private:
 	UPROPERTY(BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
 	float YawOffset;
 
+	FRotator DeltaRotation;
+
 };
