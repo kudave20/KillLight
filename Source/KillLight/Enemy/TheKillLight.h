@@ -23,7 +23,7 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class USphereComponent* OverlapSphere;
 
-	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	class UBoxComponent* CautionBox;
 
 	UPROPERTY()

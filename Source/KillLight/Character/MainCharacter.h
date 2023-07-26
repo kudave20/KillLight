@@ -59,7 +59,7 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Length")
 	float ArmLength = 200.0f;
 
-	UPROPERTY()
+	/*UPROPERTY()
 	APlayerCameraManager* PlayerCameraManager;
 
 	UPROPERTY(EditAnywhere, Category = "Camera Shake")
@@ -72,6 +72,7 @@ private:
 
 	void StartHeadBob();
 	void StopHeadBob();
+	*/
 
 	UPROPERTY(EditAnywhere, Category = "Sound")
 	class USoundCue* FlashOnSound;

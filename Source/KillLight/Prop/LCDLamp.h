@@ -20,7 +20,7 @@ public:
 	virtual void TurnOff() override;
 
 private:
-	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	class UPointLightComponent* PointLight;
 
 	UPROPERTY(EditAnywhere, Category = "Sound")

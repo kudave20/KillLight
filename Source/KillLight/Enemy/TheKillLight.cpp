@@ -29,6 +29,7 @@ ATheKillLight::ATheKillLight()
 	CautionBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	CautionBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 	CautionBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
+	CautionBox->SetGenerateOverlapEvents(false);
 }
 
 void ATheKillLight::BeginPlay()

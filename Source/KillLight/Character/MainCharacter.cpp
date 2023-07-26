@@ -68,7 +68,7 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		EnhancedInputComponent->BindAction(MovementAction, ETriggerEvent::Triggered, this, &AMainCharacter::Move);
-		EnhancedInputComponent->BindAction(MovementAction, ETriggerEvent::Completed, this, &AMainCharacter::StopHeadBob);
+		//EnhancedInputComponent->BindAction(MovementAction, ETriggerEvent::Completed, this, &AMainCharacter::StopHeadBob);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMainCharacter::Look);
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AMainCharacter::Interact);
 		EnhancedInputComponent->BindAction(ToggleFlashAction, ETriggerEvent::Triggered, this, &AMainCharacter::ToggleFlash);
@@ -87,9 +87,10 @@ void AMainCharacter::Move(const FInputActionValue& Value)
 	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 	AddMovementInput(RightDirection, MovementVector.X);
 
-	StartHeadBob();
+	//StartHeadBob();
 }
 
+/*
 void AMainCharacter::StartHeadBob()
 {
 	PlayerCameraManager = PlayerCameraManager == nullptr ? UGameplayStatics::GetPlayerCameraManager(this, 0) : PlayerCameraManager;
@@ -113,6 +114,7 @@ void AMainCharacter::StopHeadBob()
 		bShakeEnabled = false;
 	}
 }
+*/
 
 void AMainCharacter::Look(const FInputActionValue& Value)
 {
