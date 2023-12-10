@@ -4,8 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "InputActionValue.h"
 #include "MainCharacter.generated.h"
+
+class UInputMappingContext;
+class UInputAction;
+struct FInputActionValue;
+class UCameraComponent;
+class USpringArmComponent;
+class USpotLightComponent;
+class UPostProcessComponent;
+class USoundCue;
 
 UCLASS()
 class KILLLIGHT_API AMainCharacter : public ACharacter
@@ -24,19 +32,19 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, Category = Input)
-	class UInputMappingContext* MainContext;
+	TObjectPtr<UInputMappingContext> MainContext;
 
 	UPROPERTY(EditAnywhere, Category = Input)
-	class UInputAction* MovementAction;
+	TObjectPtr<UInputAction> MovementAction;
 
 	UPROPERTY(EditAnywhere, Category = Input)
-	UInputAction* LookAction;
+	TObjectPtr<UInputAction> LookAction;
 
 	UPROPERTY(EditAnywhere, Category = Input)
-	UInputAction* InteractAction;
+	TObjectPtr<UInputAction> InteractAction;
 
 	UPROPERTY(EditAnywhere, Category = Input)
-	UInputAction* ToggleFlashAction;
+	TObjectPtr<UInputAction> ToggleFlashAction;
 
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
@@ -45,16 +53,16 @@ protected:
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = Camera)
-	class UCameraComponent* Camera;
+	TObjectPtr<UCameraComponent> Camera;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
-	class USpringArmComponent* SpringArm;
+	TObjectPtr<USpringArmComponent> SpringArm;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
-	class USpotLightComponent* FlashLight;
+	TObjectPtr<USpotLightComponent> FlashLight;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
-	class UPostProcessComponent* PostProcess;
+	TObjectPtr<UPostProcessComponent> PostProcess;
 
 	UPROPERTY(EditAnywhere, Category = "Length")
 	float ArmLength = 200.0f;
@@ -75,10 +83,10 @@ private:
 	*/
 
 	UPROPERTY(EditAnywhere, Category = "Sound")
-	class USoundCue* FlashOnSound;
+	TObjectPtr<USoundCue> FlashOnSound;
 
 	UPROPERTY(EditAnywhere, Category = "Sound")
-	USoundCue* FlashOffSound;
+	TObjectPtr<USoundCue> FlashOffSound;
 
 public:
 

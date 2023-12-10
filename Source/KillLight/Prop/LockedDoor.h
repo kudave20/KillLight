@@ -6,6 +6,8 @@
 #include "Door.h"
 #include "LockedDoor.generated.h"
 
+class USoundCue;
+
 /**
  * 
  */
@@ -19,5 +21,5 @@ protected:
 
 private:
 	UPROPERTY(EditAnywhere)
-	class USoundCue* DoorSound;
+	TObjectPtr<USoundCue> DoorSound;
 };

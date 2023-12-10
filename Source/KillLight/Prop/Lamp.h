@@ -22,14 +22,14 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-	UStaticMeshComponent* Mesh;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Components")
+	TObjectPtr<UStaticMeshComponent> Mesh;
 
 	UPROPERTY(EditAnywhere, Category = "Material")
-	UMaterialInstance* OnMaterial;
+	TObjectPtr<UMaterialInstance> OnMaterial;
 
 	UPROPERTY(EditAnywhere, Category = "Material")
-	UMaterialInstance* OffMaterial;
+	TObjectPtr<UMaterialInstance> OffMaterial;
 
 	UPROPERTY(EditAnywhere, Category = "Material")
 	int32 MaterialIndexToChange;

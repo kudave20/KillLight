@@ -8,11 +8,14 @@ ADoor::ADoor()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
+	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	SetRootComponent(Root);
+	
 	DoorFrame = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("DoorFrame"));
-	SetRootComponent(DoorFrame);
+	DoorFrame->SetupAttachment(Root);
 
 	Door = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Door"));
-	Door->SetupAttachment(RootComponent);
+	Door->SetupAttachment(DoorFrame);
 }
 
 void ADoor::BeginPlay()

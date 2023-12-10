@@ -4,3 +4,12 @@
 
 #include "CoreMinimal.h"
 
+UENUM(BlueprintType)
+enum class ELevelIndex : uint8
+{
+	ELI_First UMETA(DisplayName = "First"),
+	ELI_Second UMETA(DisplayName = "Second"),
+
+	ELI_MAX UMETA(DisplayName = "Default MAX")
+};
+

@@ -6,6 +6,8 @@
 #include "Door.h"
 #include "UnlockedDoor.generated.h"
 
+class UGeometryCollectionComponent;
+
 /**
  * 
  */
@@ -13,8 +15,18 @@ UCLASS()
 class KILLLIGHT_API AUnlockedDoor : public ADoor
 {
 	GENERATED_BODY()
+
+public:
+	AUnlockedDoor();
+	
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void DestroyDoor();
+	virtual void DestroyDoor_Implementation();
 	
 private:
 	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool bIsOpen;
+
+	UPROPERTY(VisibleAnywhere, Category = "Door")
+	TObjectPtr<UGeometryCollectionComponent> DoorGeometryCollection;
 };

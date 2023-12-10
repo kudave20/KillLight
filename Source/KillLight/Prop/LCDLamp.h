@@ -6,6 +6,9 @@
 #include "Lamp.h"
 #include "LCDLamp.generated.h"
 
+class UPointLightComponent;
+class USoundCue;
+
 /**
  * 
  */
@@ -21,8 +24,8 @@ public:
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
-	class UPointLightComponent* PointLight;
+	TObjectPtr<UPointLightComponent> PointLight;
 
 	UPROPERTY(EditAnywhere, Category = "Sound")
-	class USoundCue* LightOutSound;
+	TObjectPtr<USoundCue> LightOutSound;
 };

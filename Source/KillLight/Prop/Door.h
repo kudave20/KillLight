@@ -20,12 +20,14 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void OnInteract_Implementation() override;
 
-private:
-	UPROPERTY(EditAnywhere, Category = "Door")
-	UStaticMeshComponent* DoorFrame;
+	UPROPERTY(VisibleAnywhere, Category = "Door")
+	TObjectPtr<USceneComponent> Root;
+	
+	UPROPERTY(VisibleAnywhere, Category = "Door")
+	TObjectPtr<UStaticMeshComponent> DoorFrame;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Door", meta = (AllowPrivateAccess = "true"))
-	UStaticMeshComponent* Door;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Door")
+	TObjectPtr<UStaticMeshComponent> Door;
 
 public:
 
